@@ -109,8 +109,25 @@ the outbound leg is gated. Turn it on when you pitch.
 
 ## Charting it
 
-An [apexcharts-card][apexcharts] example with gravity and temperature is in
-[`examples/fermentation-card.yaml`](examples/fermentation-card.yaml).
+Two ready-made cards are in [`examples/`](examples):
+
+- [`fermentation-card.yaml`](examples/fermentation-card.yaml) —
+  [apexcharts-card][apexcharts], gravity and temperature on twin axes.
+- [`fermentation-card-plotly.yaml`](examples/fermentation-card-plotly.yaml) —
+  [plotly-graph-card][plotly], the same two series plus preset range buttons, a
+  draggable range slider and drag-to-zoom.
+
+Prefer the Plotly one if you want to pick a time range. Apexcharts rebuilds its
+chart on every redraw and discards any selection with it, so a device reporting
+every minute resets your zoom every minute; its `brush` feature has the same
+problem. Plotly's `uirevision` tells it to preserve zoom and pan across redraws,
+which is why the Plotly card keeps your range and the Apex one cannot.
+
+Both examples use aggregation rather than raw history — a fortnight of
+minute-resolution readings is tens of thousands of points and will crawl on a
+phone. The Plotly card uses `statistic: mean` with `period: auto`, which picks
+an aggregation period from the current zoom level; this needs long-term
+statistics, which Home Assistant records automatically for these entities.
 
 ## Troubleshooting
 
@@ -132,5 +149,6 @@ MIT — see [LICENSE](LICENSE).
 
 [ispindel]: https://www.ispindel.de/
 [apexcharts]: https://github.com/RomRider/apexcharts-card
+[plotly]: https://github.com/dbuezas/lovelace-plotly-graph-card
 [hacs-badge]: https://img.shields.io/badge/HACS-Custom-41BDF5.svg
 [hacs-url]: https://github.com/hacs/integration
