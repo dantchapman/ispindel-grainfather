@@ -7,15 +7,18 @@
         "data": {
           "name": "Name",
           "grainfather_url": "Grainfather server URL",
-          "input_unit": "Gravity unit the iSpindel reports",
-          "output_unit": "Gravity unit to send to Grainfather",
+          "input_unit": "Unit received FROM the iSpindel",
+          "output_unit": "Unit sent TO Grainfather",
           "forward_minutes": "Forward to Grainfather every",
-          "stale_minutes": "Skip forwarding if the last reading is older than"
+          "stale_minutes": "Skip forwarding if the last reading is older than",
+          "webhook_id": "Webhook ID (optional)"
         },
         "data_description": {
           "grainfather_url": "From the Grainfather app: Equipment → your iSpindel → View instructions. Looks like https://community.grainfather.com/iot/your-slug/ispindel",
-          "input_unit": "If a water test reads about 0 rather than about 1.000, your device is calibrated for Plato.",
-          "stale_minutes": "Prevents a dead device from drawing a flat line across your brew session."
+          "input_unit": "Float the device in plain water: a reading near 1.000 means SG, a reading near 0 (including small negatives like -0.44) means Plato.",
+          "output_unit": "Match your Grainfather session. Usually SG. If your device reports Plato and Grainfather expects SG, these two differ — that is normal.",
+          "stale_minutes": "Prevents a dead device from drawing a flat line across your brew session. Must exceed the forwarding interval.",
+          "webhook_id": "Leave blank to generate one. Set it to reuse a URL your iSpindel is already configured with, so you do not have to put the device back into config mode."
         }
       },
       "webhook": {
@@ -25,7 +28,8 @@
     },
     "error": {
       "invalid_url": "Enter a full URL starting with http:// or https://",
-      "stale_too_short": "This must be longer than the forwarding interval, or nothing will ever be sent"
+      "stale_too_short": "This must be longer than the forwarding interval, or nothing will ever be sent",
+      "invalid_webhook_id": "Use 8-255 characters: letters, numbers, hyphen or underscore only"
     }
   },
   "options": {
@@ -34,16 +38,25 @@
         "title": "iSpindel → Grainfather",
         "data": {
           "grainfather_url": "Grainfather server URL",
-          "input_unit": "Gravity unit the iSpindel reports",
-          "output_unit": "Gravity unit to send to Grainfather",
+          "input_unit": "Unit received FROM the iSpindel",
+          "output_unit": "Unit sent TO Grainfather",
           "forward_minutes": "Forward to Grainfather every",
-          "stale_minutes": "Skip forwarding if the last reading is older than"
+          "stale_minutes": "Skip forwarding if the last reading is older than",
+          "webhook_id": "Webhook ID (optional)"
+        },
+        "data_description": {
+          "grainfather_url": "From the Grainfather app: Equipment → your iSpindel → View instructions. Looks like https://community.grainfather.com/iot/your-slug/ispindel",
+          "input_unit": "Float the device in plain water: a reading near 1.000 means SG, a reading near 0 (including small negatives like -0.44) means Plato.",
+          "output_unit": "Match your Grainfather session. Usually SG. If your device reports Plato and Grainfather expects SG, these two differ — that is normal.",
+          "stale_minutes": "Prevents a dead device from drawing a flat line across your brew session. Must exceed the forwarding interval.",
+          "webhook_id": "Leave blank to generate one. Set it to reuse a URL your iSpindel is already configured with, so you do not have to put the device back into config mode."
         }
       }
     },
     "error": {
       "invalid_url": "Enter a full URL starting with http:// or https://",
-      "stale_too_short": "This must be longer than the forwarding interval, or nothing will ever be sent"
+      "stale_too_short": "This must be longer than the forwarding interval, or nothing will ever be sent",
+      "invalid_webhook_id": "Use 8-255 characters: letters, numbers, hyphen or underscore only"
     }
   },
   "selector": {
@@ -56,24 +69,48 @@
   },
   "entity": {
     "sensor": {
-      "gravity": { "name": "Gravity" },
-      "gravity_plato": { "name": "Gravity (Plato)" },
-      "temperature": { "name": "Temperature" },
-      "angle": { "name": "Angle" },
-      "battery": { "name": "Battery" },
-      "signal": { "name": "Signal" },
-      "last_report": { "name": "Last report" },
-      "last_upload": { "name": "Last upload" },
-      "webhook_url": { "name": "Webhook URL" }
+      "gravity": {
+        "name": "Gravity"
+      },
+      "gravity_plato": {
+        "name": "Gravity (Plato)"
+      },
+      "temperature": {
+        "name": "Temperature"
+      },
+      "angle": {
+        "name": "Angle"
+      },
+      "battery": {
+        "name": "Battery"
+      },
+      "signal": {
+        "name": "Signal"
+      },
+      "last_report": {
+        "name": "Last report"
+      },
+      "last_upload": {
+        "name": "Last upload"
+      },
+      "webhook_url": {
+        "name": "Webhook URL"
+      }
     },
     "binary_sensor": {
-      "online": { "name": "Online" }
+      "online": {
+        "name": "Online"
+      }
     },
     "switch": {
-      "forwarding": { "name": "Grainfather forwarding" }
+      "forwarding": {
+        "name": "Grainfather forwarding"
+      }
     },
     "button": {
-      "upload_now": { "name": "Upload now" }
+      "upload_now": {
+        "name": "Upload now"
+      }
     }
   }
 }

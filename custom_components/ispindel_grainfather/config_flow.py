@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 from urllib.parse import urlparse
 
@@ -84,8 +85,17 @@ def _settings_schema(defaults: dict[str, Any]) -> vol.Schema:
                     unit_of_measurement="min",
                 )
             ),
+            # Optional so an existing device can keep the URL it already has --
+            # reconfiguring an iSpindel means getting it back into AP mode,
+            # which is worth avoiding once it is floating in a fermenter.
+            vol.Optional(
+                CONF_WEBHOOK_ID, default=defaults.get(CONF_WEBHOOK_ID, "")
+            ): str,
         }
     )
+
+
+WEBHOOK_ID_RE = re.compile(r"^[A-Za-z0-9_-]{8,255}$")
 
 
 def _validate(user_input: dict[str, Any]) -> dict[str, str]:
@@ -98,6 +108,9 @@ def _validate(user_input: dict[str, Any]) -> dict[str, str]:
         # Otherwise every reading is already stale by the time the timer fires
         # and nothing is ever forwarded.
         errors[CONF_STALE_MINUTES] = "stale_too_short"
+    supplied_id = (user_input.get(CONF_WEBHOOK_ID) or "").strip()
+    if supplied_id and not WEBHOOK_ID_RE.match(supplied_id):
+        errors[CONF_WEBHOOK_ID] = "invalid_webhook_id"
     return errors
 
 
@@ -121,9 +134,11 @@ class IspindelGrainfatherConfigFlow(ConfigFlow, domain=DOMAIN):
             if not errors:
                 self._data = {
                     CONF_NAME: user_input.get(CONF_NAME, DEFAULT_NAME),
-                    CONF_WEBHOOK_ID: webhook.async_generate_id(),
                     **{k: v for k, v in user_input.items() if k != CONF_NAME},
                 }
+                self._data[CONF_WEBHOOK_ID] = (
+                    user_input.get(CONF_WEBHOOK_ID) or ""
+                ).strip() or webhook.async_generate_id()
                 self._data[CONF_FORWARD_MINUTES] = int(
                     self._data[CONF_FORWARD_MINUTES]
                 )
@@ -187,6 +202,11 @@ class IspindelGrainfatherOptionsFlow(OptionsFlow):
                     user_input[CONF_FORWARD_MINUTES]
                 )
                 user_input[CONF_STALE_MINUTES] = int(user_input[CONF_STALE_MINUTES])
+                # Blank means "leave the webhook alone" rather than "generate a
+                # new one", so clearing the box cannot silently orphan a device.
+                user_input[CONF_WEBHOOK_ID] = (
+                    user_input.get(CONF_WEBHOOK_ID) or ""
+                ).strip() or self.config_entry.data[CONF_WEBHOOK_ID]
                 return self.async_create_entry(data=user_input)
 
         current = {**self.config_entry.data, **self.config_entry.options}

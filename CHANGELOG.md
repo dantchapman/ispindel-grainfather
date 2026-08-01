@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0
+
+- Webhook ID can be chosen at setup or changed later, so an existing iSpindel
+  can keep the URL it is already configured with
+- Clearer unit labels ("Unit received FROM the iSpindel" / "Unit sent TO
+  Grainfather") after both were easy to set backwards
+
 ## 1.0.0
 
 Initial release.

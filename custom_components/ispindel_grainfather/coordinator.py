@@ -71,6 +71,10 @@ class IspindelRuntime:
         # switched on. The switch entity restores the user's choice on startup.
         self.forwarding_enabled = False
         self._unsub_timer: Any = None
+        # The id we actually registered. Kept separate from the configured one
+        # so that changing the webhook in the options flow still unregisters
+        # the old hook on reload rather than the new one.
+        self._registered_webhook_id: str | None = None
 
     # -- configuration -----------------------------------------------------
 
@@ -81,7 +85,7 @@ class IspindelRuntime:
     @property
     def webhook_id(self) -> str:
         """The webhook id the device posts to."""
-        return self.entry.data[CONF_WEBHOOK_ID]
+        return self._opt(CONF_WEBHOOK_ID, self.entry.data[CONF_WEBHOOK_ID])
 
     @property
     def grainfather_url(self) -> str:
@@ -117,15 +121,17 @@ class IspindelRuntime:
 
     async def async_start(self) -> None:
         """Register the webhook and start the forwarding timer."""
+        webhook_id = self.webhook_id
         webhook.async_register(
             self.hass,
             DOMAIN,
             "iSpindel",
-            self.webhook_id,
+            webhook_id,
             self._handle_webhook,
             allowed_methods=["POST"],
             local_only=True,
         )
+        self._registered_webhook_id = webhook_id
         self._unsub_timer = async_track_time_interval(
             self.hass,
             self._handle_timer,
@@ -140,7 +146,9 @@ class IspindelRuntime:
     @callback
     def async_stop(self) -> None:
         """Tear down the webhook and timer."""
-        webhook.async_unregister(self.hass, self.webhook_id)
+        if self._registered_webhook_id is not None:
+            webhook.async_unregister(self.hass, self._registered_webhook_id)
+            self._registered_webhook_id = None
         if self._unsub_timer is not None:
             self._unsub_timer()
             self._unsub_timer = None
