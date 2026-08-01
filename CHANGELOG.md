@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.0
+
+- Signal strength is now enabled by default; a fermenter in a fridge is exactly
+  where RSSI matters, and it is the first thing to check when reports stop
+
 ## 1.2.0
 
 - Widen the lower plausibility bound from -5 °P to -20 °P; the old floor would

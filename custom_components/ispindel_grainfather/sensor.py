@@ -111,7 +111,9 @@ SENSORS: tuple[IspindelSensorDescription, ...] = (
         native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
-        entity_registry_enabled_default=False,
+        # Enabled by default: an iSpindel usually ends up inside a fermenter in
+        # a fridge, where marginal signal is a common cause of missing readings
+        # and is the first thing worth looking at when reports stop arriving.
         value_fn=lambda runtime: runtime.last_reading.rssi,
     ),
     IspindelSensorDescription(

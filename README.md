@@ -82,7 +82,7 @@ flat reads near 90° of tilt) or the calibration polynomial was never entered.
 | `sensor.…_temperature` | Normalised to °C from the device's own C/F/K |
 | `sensor.…_angle` | Tilt |
 | `sensor.…_battery` | Volts (diagnostic) |
-| `sensor.…_signal` | dBm (diagnostic, disabled by default) |
+| `sensor.…_signal` | dBm (diagnostic) |
 | `sensor.…_last_report` | Timestamp; raw device fields as attributes |
 | `sensor.…_last_upload` | Timestamp; HTTP `status`, `ok` and `detail` as attributes |
 | `sensor.…_webhook_url` | Diagnostic, disabled by default |
