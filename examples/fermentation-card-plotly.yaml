@@ -24,7 +24,6 @@ entities:
     width: 2
     shape: spline
 layout:
-  uirevision: fermentation
   height: 440
   margin:
     l: 62

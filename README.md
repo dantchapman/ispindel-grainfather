@@ -136,9 +136,11 @@ of the chart up to an hour stale, which reads as a chart that has stopped
 updating. `5minute` is at most ~6 minutes behind and still only ~8,000 points
 across a fortnight.
 
-Note also that `uirevision` preserves the x-range as well as the zoom level, so
-the window does not slide forward on its own. Click one of the range buttons to
-re-anchor to the latest reading.
+Do **not** set `layout.uirevision` on the Plotly card. It manages that value
+itself -- randomising it on each fetch so the chart re-ranges onto new data, and
+holding it steady only while you are zoomed in, at which point a reset button
+appears on the card to resume following. Your config is merged last, so a
+hardcoded `uirevision` overrides that and the chart stops updating entirely.
 
 ## Troubleshooting
 
