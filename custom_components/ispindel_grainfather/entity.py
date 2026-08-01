@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from homeassistant.core import callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity import Entity
@@ -41,6 +42,12 @@ class IspindelEntity(Entity):
                 )
             )
 
+    @callback
     def _handle_update(self) -> None:
-        """Redraw when the runtime has new data."""
+        """Redraw when the runtime has new data.
+
+        The @callback decorator is load-bearing: without it the dispatcher
+        treats this as a blocking function and runs it in an executor thread,
+        where async_write_ha_state() is not allowed and the update is lost.
+        """
         self.async_write_ha_state()
