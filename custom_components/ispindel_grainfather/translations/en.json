@@ -14,7 +14,7 @@
           "webhook_id": "Webhook ID (optional)"
         },
         "data_description": {
-          "grainfather_url": "From the Grainfather app: Equipment → your iSpindel → View instructions. Looks like https://community.grainfather.com/iot/your-slug/ispindel",
+          "grainfather_url": "From the Grainfather app: Equipment → your iSpindel → View instructions. Copy the whole server address and path shown there.",
           "input_unit": "Float the device in plain water: a reading near 1.000 means SG, a reading near 0 (including small negatives like -0.44) means Plato.",
           "output_unit": "Match your Grainfather session. Usually SG. If your device reports Plato and Grainfather expects SG, these two differ — that is normal.",
           "stale_minutes": "Prevents a dead device from drawing a flat line across your brew session. Must exceed the forwarding interval.",
@@ -45,7 +45,7 @@
           "webhook_id": "Webhook ID (optional)"
         },
         "data_description": {
-          "grainfather_url": "From the Grainfather app: Equipment → your iSpindel → View instructions. Looks like https://community.grainfather.com/iot/your-slug/ispindel",
+          "grainfather_url": "From the Grainfather app: Equipment → your iSpindel → View instructions. Copy the whole server address and path shown there.",
           "input_unit": "Float the device in plain water: a reading near 1.000 means SG, a reading near 0 (including small negatives like -0.44) means Plato.",
           "output_unit": "Match your Grainfather session. Usually SG. If your device reports Plato and Grainfather expects SG, these two differ — that is normal.",
           "stale_minutes": "Prevents a dead device from drawing a flat line across your brew session. Must exceed the forwarding interval.",

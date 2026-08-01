@@ -23,6 +23,11 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
+          # This is a custom repository, not a candidate for the HACS default
+          # list, so the brands check does not apply -- it requires the domain
+          # to be registered in home-assistant/brands, which is only for
+          # integrations shipped with or endorsed by Home Assistant.
+          ignore: brands
 
   ruff:
     name: ruff
