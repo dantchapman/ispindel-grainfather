@@ -30,9 +30,16 @@ MIN_OFFLINE_SECONDS: Final = 300
 # and matches the interval iSpindel's own documentation recommends.
 GRAINFATHER_REPORTED_INTERVAL: Final = 900
 
-# Outside this Plato range the Plato→SG conversion approaches a divide-by-zero
-# and the reading is meaningless anyway (the device is not floating).
-PLATO_MIN: Final = -5.0
+# Bounds on a believable reading. The upper one matters: the Plato→SG
+# conversion divides by zero around 294 °P, and a device lying on a bench reads
+# in the high twenties, so 50 is comfortably clear of real wort.
+#
+# The lower bound is deliberately generous. Fermentations routinely finish below
+# 1.000 SG -- a dry wine lands near 0.985 (-3.9 °P) and a high-ABV one near
+# 0.980 (-5.3 °P) -- so anything tighter than this hides real data. It exists
+# only to catch a misconfigured input unit, which produces figures in the
+# thousands, not to second-guess a plausible ferment.
+PLATO_MIN: Final = -20.0
 PLATO_MAX: Final = 50.0
 
 SIGNAL_NEW_READING: Final = f"{DOMAIN}_new_reading"

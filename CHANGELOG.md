@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0
+
+- Widen the lower plausibility bound from -5 °P to -20 °P; the old floor would
+  have hidden legitimate high-ABV dry ferments finishing below 0.981 SG
+
 ## 1.1.0
 
 - Webhook ID can be chosen at setup or changed later, so an existing iSpindel
