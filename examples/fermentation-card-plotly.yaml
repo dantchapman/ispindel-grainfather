@@ -3,73 +3,85 @@ title: Fermentation
 hours_to_show: 14d
 refresh_interval: 60
 entities:
-  - entity: sensor.ispindel_gravity
-    name: Gravity
-    yaxis: y1
-    statistic: mean
-    period: auto
-    hovertemplate: "%{y:.4f} SG<extra></extra>"
-    line:
-      color: "#2a78d6"
-      width: 2
-      shape: spline
-  - entity: sensor.ispindel_temperature
-    name: Temperature
-    yaxis: y2
-    statistic: mean
-    period: auto
-    hovertemplate: "%{y:.1f} °C<extra></extra>"
-    line:
-      color: "#eb6834"
-      width: 2
-      shape: spline
+- entity: sensor.ispindel_gravity
+  name: Gravity
+  yaxis: y1
+  statistic: mean
+  period: auto
+  hovertemplate: '%{y:.4f} SG<extra></extra>'
+  line:
+    color: '#2a78d6'
+    width: 2
+    shape: spline
+- entity: sensor.ispindel_temperature
+  name: Temperature
+  yaxis: y2
+  statistic: mean
+  period: auto
+  hovertemplate: '%{y:.1f} °C<extra></extra>'
+  line:
+    color: '#eb6834'
+    width: 2
+    shape: spline
 layout:
-  # Plotly preserves zoom/pan across redraws while this value is unchanged.
-  # This is what stops a new reading from throwing away your selected range.
   uirevision: fermentation
-  height: 400
+  height: 440
   margin:
     l: 62
     r: 62
-    t: 70
+    t: 120
     b: 50
   hovermode: x unified
   legend:
     orientation: h
-    y: 1.16
     x: 0
+    xanchor: left
+    y: 1.1
+    yanchor: bottom
   yaxis:
-    title: Specific gravity
+    title:
+      text: Specific gravity
+      font:
+        color: '#2a78d6'
     tickformat: .4f
+    tickfont:
+      color: '#2a78d6'
   yaxis2:
-    title: Temperature (°C)
+    title:
+      text: Temperature (°C)
+      font:
+        color: '#eb6834'
     overlaying: y
     side: right
     tickformat: .1f
     showgrid: false
+    tickfont:
+      color: '#eb6834'
   xaxis:
     rangeslider:
       visible: true
       thickness: 0.14
     rangeselector:
-      y: 1.24
+      y: 1.3
       x: 0
       buttons:
-        - count: 6
-          step: hour
-          stepmode: backward
-          label: 6h
-        - count: 1
-          step: day
-          stepmode: backward
-          label: 1d
-        - count: 3
-          step: day
-          stepmode: backward
-          label: 3d
-        - count: 7
-          step: day
-          stepmode: backward
-          label: 1w
-        - step: all
-          label: All
+      - count: 6
+        step: hour
+        stepmode: backward
+        label: 6h
+      - count: 1
+        step: day
+        stepmode: backward
+        label: 1d
+      - count: 3
+        step: day
+        stepmode: backward
+        label: 3d
+      - count: 7
+        step: day
+        stepmode: backward
+        label: 1w
+      - step: all
+        label: All
+      xanchor: left
+      yanchor: bottom
