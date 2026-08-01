@@ -125,9 +125,20 @@ which is why the Plotly card keeps your range and the Apex one cannot.
 
 Both examples use aggregation rather than raw history — a fortnight of
 minute-resolution readings is tens of thousands of points and will crawl on a
-phone. The Plotly card uses `statistic: mean` with `period: auto`, which picks
-an aggregation period from the current zoom level; this needs long-term
-statistics, which Home Assistant records automatically for these entities.
+phone. The Plotly card uses `statistic: mean` with `period: 5minute`, which needs
+long-term statistics -- Home Assistant records these automatically for these
+entities.
+
+Avoid `period: auto` on a chart you want to watch live. It picks the period
+from the zoom level, so a multi-day view resolves to hourly statistics, and an
+hourly bucket is not written until the hour ends -- leaving the right-hand edge
+of the chart up to an hour stale, which reads as a chart that has stopped
+updating. `5minute` is at most ~6 minutes behind and still only ~8,000 points
+across a fortnight.
+
+Note also that `uirevision` preserves the x-range as well as the zoom level, so
+the window does not slide forward on its own. Click one of the range buttons to
+re-anchor to the latest reading.
 
 ## Troubleshooting
 
