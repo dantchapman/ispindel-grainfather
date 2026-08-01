@@ -1,0 +1,56 @@
+type: custom:apexcharts-card
+header:
+  show: true
+  title: Fermentation
+  show_states: true
+  colorize_states: true
+graph_span: 7d
+span:
+  end: minute
+update_interval: 1min
+all_series_config:
+  stroke_width: 2
+  curve: smooth
+  group_by:
+    func: avg
+    duration: 15min
+yaxis:
+  - id: sg
+    decimals: 4
+    apex_config:
+      title:
+        text: Specific gravity
+      tickAmount: 5
+  - id: temp
+    opposite: true
+    decimals: 1
+    apex_config:
+      title:
+        text: Temperature (°C)
+      tickAmount: 5
+series:
+  - entity: sensor.ispindel_gravity
+    name: Gravity
+    yaxis_id: sg
+    color: "#2a78d6"
+    float_precision: 4
+  - entity: sensor.ispindel_temperature
+    name: Temperature
+    yaxis_id: temp
+    color: "#eb6834"
+    float_precision: 1
+apex_config:
+  chart:
+    height: 340
+    zoom:
+      enabled: true
+      type: x
+  legend:
+    show: true
+    position: bottom
+  tooltip:
+    shared: true
+    x:
+      format: ddd d MMM HH:mm
+  grid:
+    borderColor: rgba(127, 127, 127, 0.2)

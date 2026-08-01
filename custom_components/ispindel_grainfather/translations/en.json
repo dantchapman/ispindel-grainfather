@@ -1,0 +1,79 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "iSpindel → Grainfather",
+        "description": "Home Assistant will receive readings from the iSpindel and relay them to your Grainfather brew session.",
+        "data": {
+          "name": "Name",
+          "grainfather_url": "Grainfather server URL",
+          "input_unit": "Gravity unit the iSpindel reports",
+          "output_unit": "Gravity unit to send to Grainfather",
+          "forward_minutes": "Forward to Grainfather every",
+          "stale_minutes": "Skip forwarding if the last reading is older than"
+        },
+        "data_description": {
+          "grainfather_url": "From the Grainfather app: Equipment → your iSpindel → View instructions. Looks like https://community.grainfather.com/iot/your-slug/ispindel",
+          "input_unit": "If a water test reads about 0 rather than about 1.000, your device is calibrated for Plato.",
+          "stale_minutes": "Prevents a dead device from drawing a flat line across your brew session."
+        }
+      },
+      "webhook": {
+        "title": "Point the iSpindel at Home Assistant",
+        "description": "In the iSpindel configuration portal, set:\n\n- **Service Type**: HTTP\n- **Server Address**: `{host}`\n- **Server Port**: `{port}`\n- **Server URL**: `{path}`\n\nFull URL: `{url}`\n\nThe webhook only accepts requests from your local network. Submit to finish."
+      }
+    },
+    "error": {
+      "invalid_url": "Enter a full URL starting with http:// or https://",
+      "stale_too_short": "This must be longer than the forwarding interval, or nothing will ever be sent"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "iSpindel → Grainfather",
+        "data": {
+          "grainfather_url": "Grainfather server URL",
+          "input_unit": "Gravity unit the iSpindel reports",
+          "output_unit": "Gravity unit to send to Grainfather",
+          "forward_minutes": "Forward to Grainfather every",
+          "stale_minutes": "Skip forwarding if the last reading is older than"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Enter a full URL starting with http:// or https://",
+      "stale_too_short": "This must be longer than the forwarding interval, or nothing will ever be sent"
+    }
+  },
+  "selector": {
+    "gravity_unit": {
+      "options": {
+        "sg": "Specific gravity (SG)",
+        "plato": "Degrees Plato (°P)"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "gravity": { "name": "Gravity" },
+      "gravity_plato": { "name": "Gravity (Plato)" },
+      "temperature": { "name": "Temperature" },
+      "angle": { "name": "Angle" },
+      "battery": { "name": "Battery" },
+      "signal": { "name": "Signal" },
+      "last_report": { "name": "Last report" },
+      "last_upload": { "name": "Last upload" },
+      "webhook_url": { "name": "Webhook URL" }
+    },
+    "binary_sensor": {
+      "online": { "name": "Online" }
+    },
+    "switch": {
+      "forwarding": { "name": "Grainfather forwarding" }
+    },
+    "button": {
+      "upload_now": { "name": "Upload now" }
+    }
+  }
+}
