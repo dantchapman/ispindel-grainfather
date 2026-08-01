@@ -39,10 +39,11 @@ Copy `custom_components/ispindel_grainfather/` into your Home Assistant
 | Setting | Notes |
 |---|---|
 | Grainfather server URL | From the Grainfather app: Equipment → your iSpindel → *View instructions*. Looks like `https://community.grainfather.com/iot/your-slug/ispindel` |
-| Gravity unit the iSpindel reports | See [Which unit is my device using?](#which-unit-is-my-device-using) |
-| Gravity unit to send to Grainfather | Match your Grainfather session. Usually SG |
+| Unit received FROM the iSpindel | See [Which unit is my device using?](#which-unit-is-my-device-using) |
+| Unit sent TO Grainfather | Match your Grainfather session. Usually SG. If your device reports Plato and Grainfather expects SG, these two differ — that is normal |
 | Forward every | Default 15 minutes |
 | Skip forwarding if older than | Default 30 minutes. Must exceed the forward interval |
+| Webhook ID (optional) | Leave blank to generate one. Set it to reuse a URL an existing iSpindel is already configured with |
 
 The final step shows the webhook URL. Enter it in the iSpindel's configuration
 portal:
@@ -72,6 +73,12 @@ error. `-0.44 °P` is about `0.9983 SG`, i.e. 0.0017 out.
 
 If the numbers look like neither, the device is probably not floating (lying
 flat reads near 90° of tilt) or the calibration polynomial was never entered.
+
+Note that a device resting against the side of the vessel gives readings just as
+steady as one floating freely — steadiness is not evidence of a good reading. If
+a water test is off by more than a few thousandths, check the angle: for a given
+calibration, water corresponds to one specific tilt, and a device that is caught
+on something sits several degrees away from it.
 
 ## Entities
 
