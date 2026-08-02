@@ -34,6 +34,7 @@ from .const import (
     GRAINFATHER_REPORTED_INTERVAL,
     MIN_OFFLINE_SECONDS,
     SIGNAL_NEW_READING,
+    SIGNAL_SESSIONS,
     SIGNAL_UPLOAD_RESULT,
     UNIT_PLATO,
     UNIT_SG,
@@ -76,6 +77,29 @@ class IspindelRuntime:
         # so that changing the webhook in the options flow still unregisters
         # the old hook on reload rather than the new one.
         self._registered_webhook_id: str | None = None
+        # Set during setup; brew sessions are stored separately from the live
+        # reading so that ending a brew never touches the measurement path.
+        self.sessions: Any = None
+
+    @property
+    def current_gravity(self) -> float | None:
+        """Latest specific gravity, or None if there is nothing believable.
+
+        Used when snapshotting OG at pitch and FG at the end -- a reading the
+        guard would reject must not be silently recorded as a brew's defining
+        number.
+        """
+        reading = self.last_reading
+        if reading is None or not reading.gravity_is_plausible:
+            return None
+        return reading.gravity_sg
+
+    @callback
+    def async_notify_sessions(self) -> None:
+        """Tell the session entities that the stored sessions changed."""
+        async_dispatcher_send(
+            self.hass, f"{SIGNAL_SESSIONS}_{self.entry.entry_id}"
+        )
 
     # -- configuration -----------------------------------------------------
 

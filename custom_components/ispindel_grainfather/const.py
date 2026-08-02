@@ -49,3 +49,19 @@ PLATO_MAX: Final = 50.0
 
 SIGNAL_NEW_READING: Final = f"{DOMAIN}_new_reading"
 SIGNAL_UPLOAD_RESULT: Final = f"{DOMAIN}_upload_result"
+
+SIGNAL_SESSIONS: Final = f"{DOMAIN}_sessions"
+
+# Standard homebrew approximation: ABV ~= (OG - FG) * 131.25.
+ABV_FACTOR: Final = 131.25
+
+SERVICE_START_SESSION: Final = "start_session"
+SERVICE_END_SESSION: Final = "end_session"
+SERVICE_DELETE_SESSION: Final = "delete_session"
+
+ATTR_SESSION_NAME: Final = "name"
+ATTR_RECIPE_URL: Final = "recipe_url"
+ATTR_OG: Final = "og"
+ATTR_FG: Final = "fg"
+ATTR_PITCHED: Final = "pitched"
+ATTR_SESSION_ID: Final = "session_id"

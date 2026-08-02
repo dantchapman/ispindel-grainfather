@@ -95,6 +95,30 @@
       },
       "webhook_url": {
         "name": "Webhook URL"
+      },
+      "session_start": {
+        "name": "Session start"
+      },
+      "session_end": {
+        "name": "Session end"
+      },
+      "session_name": {
+        "name": "Session"
+      },
+      "session_og": {
+        "name": "OG"
+      },
+      "session_fg": {
+        "name": "FG"
+      },
+      "session_elapsed": {
+        "name": "Elapsed"
+      },
+      "session_attenuation": {
+        "name": "Apparent attenuation"
+      },
+      "session_abv": {
+        "name": "ABV"
       }
     },
     "binary_sensor": {
@@ -110,6 +134,69 @@
     "button": {
       "upload_now": {
         "name": "Upload now"
+      },
+      "pitch": {
+        "name": "Pitch yeast now"
+      },
+      "end_fermentation": {
+        "name": "End fermentation"
+      }
+    },
+    "select": {
+      "session": {
+        "name": "Viewing session"
+      }
+    },
+    "text": {
+      "brew_name": {
+        "name": "Brew name"
+      },
+      "recipe_url": {
+        "name": "Recipe link"
+      }
+    }
+  },
+  "services": {
+    "start_session": {
+      "name": "Start brew session",
+      "description": "Begins a new brew session, ending any that is still running.",
+      "fields": {
+        "name": {
+          "name": "Name",
+          "description": "Name of the brew."
+        },
+        "recipe_url": {
+          "name": "Recipe link",
+          "description": "URL of the recipe."
+        },
+        "og": {
+          "name": "Original gravity",
+          "description": "Defaults to the current iSpindel reading."
+        },
+        "pitched": {
+          "name": "Pitched at",
+          "description": "Defaults to now. Set it to back-fill a session that was started earlier."
+        }
+      }
+    },
+    "end_session": {
+      "name": "End brew session",
+      "description": "Closes the running session.",
+      "fields": {
+        "fg": {
+          "name": "Final gravity",
+          "description": "Defaults to the current iSpindel reading."
+        }
+      }
+    },
+    "delete_session": {
+      "name": "Delete brew session",
+      "description": "Removes a session record. Measurement history is not affected.",
+      "fields": {
+        "session_id": {
+          "name": "Session ID",
+          "description": "From the Session sensor's session_id attribute."
+        }
       }
     }
   }

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.0
+
+- Brew sessions: named fermentations with a recipe link, pitch/end times, OG and
+  FG, stored in HA and selectable so charts and figures can be scoped to one brew
+- New "Brew Session" device with select, text, button and sensor entities
+- Services: start_session, end_session, delete_session
+
 ## 1.4.0
 
 - Default the outbound unit to Plato: Grainfather reads the gravity field as
