@@ -56,8 +56,7 @@ class BrewSession:
         """
         when = self.pitched_dt
         stamp = dt_util.as_local(when).strftime("%d %b %Y") if when else "unknown"
-        suffix = "" if self.is_active else ""
-        return f"{self.name} ({stamp}){suffix}"
+        return f"{self.name} ({stamp})"
 
     def to_dict(self) -> dict[str, Any]:
         """Serialise for the store."""
