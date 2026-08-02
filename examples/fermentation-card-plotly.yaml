@@ -8,6 +8,7 @@ entities:
   yaxis: y1
   statistic: mean
   period: 5minute
+  extend_to_present: true
   hovertemplate: '%{y:.4f} SG<extra></extra>'
   line:
     color: '#2a78d6'
@@ -18,6 +19,7 @@ entities:
   yaxis: y2
   statistic: mean
   period: 5minute
+  extend_to_present: true
   hovertemplate: '%{y:.1f} °C<extra></extra>'
   line:
     color: '#eb6834'

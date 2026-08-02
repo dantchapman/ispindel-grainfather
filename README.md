@@ -136,6 +136,13 @@ of the chart up to an hour stale, which reads as a chart that has stopped
 updating. `5minute` is at most ~6 minutes behind and still only ~8,000 points
 across a fortnight.
 
+Set `extend_to_present: true` on statistics traces. It defaults to `true` for
+state history but **`false` for statistics**, so without it the line stops at the
+last completed bucket instead of reaching the present -- and a chart with only
+one bucket so far draws nothing at all, because a line trace needs two points to
+render a segment. That combination reads as "the chart is broken" when the data
+is in fact arriving normally.
+
 Do **not** set `layout.uirevision` on the Plotly card. It manages that value
 itself -- randomising it on each fetch so the chart re-ranges onto new data, and
 holding it steady only while you are zoomed in, at which point a reset button
