@@ -28,6 +28,7 @@ from .const import (
     CONF_STALE_MINUTES,
     CONF_WEBHOOK_ID,
     DEFAULT_FORWARD_MINUTES,
+    DEFAULT_OUTPUT_UNIT,
     DEFAULT_STALE_MINUTES,
     DOMAIN,
     GRAINFATHER_REPORTED_INTERVAL,
@@ -100,7 +101,7 @@ class IspindelRuntime:
     @property
     def output_unit(self) -> str:
         """Gravity unit to send to Grainfather."""
-        return self._opt(CONF_OUTPUT_UNIT, UNIT_SG)
+        return self._opt(CONF_OUTPUT_UNIT, DEFAULT_OUTPUT_UNIT)
 
     @property
     def forward_minutes(self) -> int:

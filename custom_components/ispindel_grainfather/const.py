@@ -15,6 +15,11 @@ CONF_WEBHOOK_ID: Final = "webhook_id"
 
 UNIT_SG: Final = "sg"
 UNIT_PLATO: Final = "plato"
+
+# Grainfather's ingest endpoint interprets the iSpindel "gravity" field as degrees
+# Plato and converts it for display. Sending SG makes it convert a second time:
+# 1.0591 SG arrives as 1.0591 °P and shows as 1.0041.
+DEFAULT_OUTPUT_UNIT: Final = UNIT_PLATO
 GRAVITY_UNITS: Final = [UNIT_SG, UNIT_PLATO]
 
 DEFAULT_NAME: Final = "iSpindel"

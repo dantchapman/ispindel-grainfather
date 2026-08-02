@@ -37,6 +37,7 @@ from .const import (
     CONF_WEBHOOK_ID,
     DEFAULT_FORWARD_MINUTES,
     DEFAULT_NAME,
+    DEFAULT_OUTPUT_UNIT,
     DEFAULT_STALE_MINUTES,
     DOMAIN,
     GRAVITY_UNITS,
@@ -65,7 +66,7 @@ def _settings_schema(defaults: dict[str, Any]) -> vol.Schema:
                 CONF_INPUT_UNIT, default=defaults.get(CONF_INPUT_UNIT, UNIT_SG)
             ): _unit_selector(),
             vol.Required(
-                CONF_OUTPUT_UNIT, default=defaults.get(CONF_OUTPUT_UNIT, UNIT_SG)
+                CONF_OUTPUT_UNIT, default=defaults.get(CONF_OUTPUT_UNIT, DEFAULT_OUTPUT_UNIT)
             ): _unit_selector(),
             vol.Required(
                 CONF_FORWARD_MINUTES,

@@ -40,7 +40,7 @@ Copy `custom_components/ispindel_grainfather/` into your Home Assistant
 |---|---|
 | Grainfather server URL | From the Grainfather app: Equipment → your iSpindel → *View instructions*. Looks like `https://community.grainfather.com/iot/your-slug/ispindel` |
 | Unit received FROM the iSpindel | See [Which unit is my device using?](#which-unit-is-my-device-using) |
-| Unit sent TO Grainfather | Match your Grainfather session. Usually SG. If your device reports Plato and Grainfather expects SG, these two differ — that is normal |
+| Unit sent TO Grainfather | Leave as **Plato**. See [What unit does Grainfather want?](#what-unit-does-grainfather-want) |
 | Forward every | Default 15 minutes |
 | Skip forwarding if older than | Default 30 minutes. Must exceed the forward interval |
 | Webhook ID (optional) | Leave blank to generate one. Set it to reuse a URL an existing iSpindel is already configured with |
@@ -79,6 +79,21 @@ steady as one floating freely — steadiness is not evidence of a good reading. 
 a water test is off by more than a few thousandths, check the angle: for a given
 calibration, water corresponds to one specific tilt, and a device that is caught
 on something sits several degrees away from it.
+
+## What unit does Grainfather want?
+
+**Plato**, despite brew sessions displaying SG.
+
+Grainfather's ingest endpoint treats the iSpindel `gravity` field as degrees
+Plato and converts it for display. Send SG and it converts a second time: a real
+`1.0591 SG` arrives as `1.0591 °P` and shows in the session as `1.0041`. If your
+session reads a little over `1.00` while Home Assistant shows a healthy wort
+gravity, that is this bug, and the fix is to set the output unit to Plato.
+
+Note that a wrong unit still returns HTTP `201` — the endpoint accepts the
+payload happily and misreads it. `sensor.…_last_upload` showing `201` confirms
+delivery, not correctness. Check an actual figure in the app against
+`sensor.…_gravity` once, at the start of a brew.
 
 ## Entities
 

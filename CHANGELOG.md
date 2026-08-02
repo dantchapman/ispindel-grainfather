@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0
+
+- Default the outbound unit to Plato: Grainfather reads the gravity field as
+  Plato, so sending SG was converted a second time and understated gravity
+
 ## 1.3.0
 
 - Signal strength is now enabled by default; a fermenter in a fridge is exactly
