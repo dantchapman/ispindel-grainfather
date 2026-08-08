@@ -129,8 +129,8 @@ Two ready-made cards are in [`examples/`](examples):
 - [`fermentation-card.yaml`](examples/fermentation-card.yaml) —
   [apexcharts-card][apexcharts], gravity and temperature on twin axes.
 - [`fermentation-card-plotly.yaml`](examples/fermentation-card-plotly.yaml) —
-  [plotly-graph-card][plotly], the same two series plus preset range buttons, a
-  draggable range slider and drag-to-zoom.
+  [plotly-graph-card][plotly], the same two series, a draggable range slider,
+  and a window that follows whichever brew session is selected.
 
 Prefer the Plotly one if you want to pick a time range. Apexcharts rebuilds its
 chart on every redraw and discards any selection with it, so a device reporting
@@ -157,6 +157,22 @@ last completed bucket instead of reaching the present -- and a chart with only
 one bucket so far draws nothing at all, because a line trace needs two points to
 render a segment. That combination reads as "the chart is broken" when the data
 is in fact arriving normally.
+
+**Do not assign `yaxis:` on the entities, and do not put `overlaying`, `side`
+or `anchor` in `layout.yaxis*`.** The Plotly card works out axis assignment and
+placement itself from each trace's unit -- with SG and °C it creates `y` and
+`y2` and wires up the overlay correctly. Setting either by hand conflicts with
+that and the gravity trace silently stops drawing: it still appears in the
+legend and the rangeslider, and the left axis still auto-ranges to its values,
+but nothing is plotted. Restrict `layout.yaxis*` to cosmetics -- title,
+`tickformat`, `tickfont`.
+
+The session-scoped window comes from `hours_to_show` (fetch from the pitch of
+the selected session) plus `layout.xaxis.range` (clamp the view to its start
+and end). `time_offset` cannot do the job: no duration parser in the bundle
+accepts a negative value, so a finished session's window cannot be shifted
+backwards that way. Give `xaxis.range` LOCAL time strings, since the card plots
+in local time.
 
 Do **not** set `layout.uirevision` on the Plotly card. It manages that value
 itself -- randomising it on each fetch so the chart re-ranges onto new data, and

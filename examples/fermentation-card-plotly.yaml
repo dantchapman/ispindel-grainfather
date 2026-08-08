@@ -1,88 +1,95 @@
 type: custom:plotly-graph
 title: Fermentation
-hours_to_show: 14d
 refresh_interval: 60
+
+# Window follows whichever brew session is selected.
+hours_to_show: |
+  $ex {
+    const s = hass.states["sensor.brew_session_session_start"];
+    if (!s) return 24;
+    const a = Date.parse(s.state);
+    if (isNaN(a)) return 24;
+    return Math.max(1, (Date.now() - a) / 3600000 * 1.02);
+  }
+
+# No `yaxis:` on either entity. The card assigns axes itself from each trace's
+# unit -- SG and °C are different, so it creates y and y2 and wires up the
+# overlay and side placement correctly. Setting them by hand is what broke the
+# gravity trace: a manual `overlaying`/`side` on yaxis2 conflicted with the
+# card's own layout and left the series with nothing to draw on.
 entities:
-- entity: sensor.ispindel_gravity
-  name: Gravity
-  yaxis: y1
-  statistic: mean
-  period: 5minute
-  extend_to_present: true
-  hovertemplate: '%{y:.4f} SG<extra></extra>'
-  line:
-    color: '#2a78d6'
-    width: 2
-    shape: spline
-- entity: sensor.ispindel_temperature
-  name: Temperature
-  yaxis: y2
-  statistic: mean
-  period: 5minute
-  extend_to_present: true
-  hovertemplate: '%{y:.1f} °C<extra></extra>'
-  line:
-    color: '#eb6834'
-    width: 2
-    shape: spline
+  - entity: sensor.ispindel_gravity
+    name: Gravity
+    statistic: mean
+    period: 5minute
+    extend_to_present: true
+    hovertemplate: "%{y:.4f} SG<extra></extra>"
+    line:
+      color: "#2a78d6"
+      width: 2
+      shape: spline
+
+  - entity: sensor.ispindel_temperature
+    name: Temperature
+    statistic: mean
+    period: 5minute
+    extend_to_present: true
+    hovertemplate: "%{y:.1f} °C<extra></extra>"
+    line:
+      color: "#eb6834"
+      width: 2
+      shape: spline
+
 layout:
   height: 440
   margin:
     l: 62
     r: 62
-    t: 120
+    t: 70
     b: 50
   hovermode: x unified
   legend:
     orientation: h
     x: 0
     xanchor: left
-    y: 1.1
+    y: 1.06
     yanchor: bottom
+
+  # Cosmetics only. Deliberately no `overlaying`, `side` or `anchor` -- those
+  # are the card's to decide.
   yaxis:
     title:
       text: Specific gravity
       font:
-        color: '#2a78d6'
+        color: "#2a78d6"
     tickformat: .4f
     tickfont:
-      color: '#2a78d6'
+      color: "#2a78d6"
   yaxis2:
     title:
       text: Temperature (°C)
       font:
-        color: '#eb6834'
-    overlaying: y
-    side: right
+        color: "#eb6834"
     tickformat: .1f
-    showgrid: false
     tickfont:
-      color: '#eb6834'
+      color: "#eb6834"
+    showgrid: false
+
   xaxis:
+    # Clamp the view to the selected session. Plotly is given LOCAL time
+    # strings because the card plots in local time.
+    range: |
+      $ex {
+        const s = hass.states["sensor.brew_session_session_start"];
+        const e = hass.states["sensor.brew_session_session_end"];
+        if (!s || !e) return undefined;
+        const a = Date.parse(s.state), b = Date.parse(e.state);
+        if (isNaN(a) || isNaN(b) || b <= a) return undefined;
+        const pad = Math.min((b - a) * 0.02, 2 * 3600000);
+        const local = (ms) => new Date(ms - new Date().getTimezoneOffset() * 60000)
+                                .toISOString().slice(0, 19).replace("T", " ");
+        return [local(a - pad), local(b + pad)];
+      }
     rangeslider:
       visible: true
       thickness: 0.14
-    rangeselector:
-      y: 1.3
-      x: 0
-      buttons:
-      - count: 6
-        step: hour
-        stepmode: backward
-        label: 6h
-      - count: 1
-        step: day
-        stepmode: backward
-        label: 1d
-      - count: 3
-        step: day
-        stepmode: backward
-        label: 3d
-      - count: 7
-        step: day
-        stepmode: backward
-        label: 1w
-      - step: all
-        label: All
-      xanchor: left
-      yanchor: bottom
