@@ -174,6 +174,23 @@ class SessionStore:
         await self.async_save()
         return session
 
+    async def async_update_selected(self, **changes: Any) -> BrewSession | None:
+        """Edit fields on the session currently being viewed.
+
+        Edits target the viewed session rather than the active one so that a
+        finished brew can be corrected after the fact -- which is the usual
+        case for gravity, since the reliable reading comes from a hydrometer
+        sample taken at bottling, long after the yeast has stopped.
+        """
+        session = self.selected
+        if session is None:
+            return None
+        for key, value in changes.items():
+            if hasattr(session, key):
+                setattr(session, key, value)
+        await self.async_save()
+        return session
+
     async def async_update_active(self, **changes: Any) -> BrewSession | None:
         """Edit fields on the active session."""
         session = self.active

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0
+
+- OG and FG can be typed in, overriding the iSpindel snapshot: a floating
+  hydrometer accumulates yeast and drifts, so the hydrometer sample at bottling
+  is usually the figure worth keeping
+- Editable fields now act on the session in view, matching the sensors
+
 ## 1.5.0
 
 - Brew sessions: named fermentations with a recipe link, pitch/end times, OG and

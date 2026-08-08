@@ -56,8 +56,8 @@ async def async_setup_entry(
 class BrewText(BrewSessionEntity, TextEntity):
     """A field on the active brew session.
 
-    Edits apply to the *active* session rather than the viewed one -- renaming
-    a finished brew from a screen showing live gravity would be surprising.
+    Edits apply to the session in view, matching the sensors and the settable
+    gravities, so what you are looking at is what you are editing.
     """
 
     entity_description: BrewTextDescription
@@ -71,18 +71,18 @@ class BrewText(BrewSessionEntity, TextEntity):
 
     @property
     def available(self) -> bool:
-        """Only editable while a brew is running."""
-        return self.active is not None
+        """Editable whenever a session is in view."""
+        return self.viewed is not None
 
     @property
     def native_value(self) -> str | None:
-        """Current value on the active session."""
-        session = self.active
+        """Current value on the viewed session."""
+        session = self.viewed
         return self.entity_description.value_fn(session) if session else None
 
     async def async_set_value(self, value: str) -> None:
-        """Write the value back to the active session."""
-        await self.store.async_update_active(
+        """Write the value back to the viewed session."""
+        await self.store.async_update_selected(
             **{self.entity_description.field: value}
         )
         self.runtime.async_notify_sessions()

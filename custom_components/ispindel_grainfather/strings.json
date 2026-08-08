@@ -154,6 +154,14 @@
       "recipe_url": {
         "name": "Recipe link"
       }
+    },
+    "number": {
+      "og_set": {
+        "name": "OG (set)"
+      },
+      "fg_set": {
+        "name": "FG (set)"
+      }
     }
   },
   "services": {
