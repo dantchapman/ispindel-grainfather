@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.0
+
+- ABV now uses the Balling-derived formula rather than (OG-FG)*131.25, which
+  under-reads by 0.2% at 6.5% and 0.8% at 10%
+
 ## 1.6.0
 
 - OG and FG can be typed in, overriding the iSpindel snapshot: a floating

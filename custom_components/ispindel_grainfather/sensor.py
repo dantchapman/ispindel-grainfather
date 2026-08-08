@@ -25,7 +25,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import dt as dt_util
 
 from . import IspindelConfigEntry
-from .const import ABV_FACTOR
 from .coordinator import IspindelRuntime
 from .entity import IspindelEntity
 from .session import BrewSession
@@ -243,10 +242,18 @@ def _attenuation(runtime: IspindelRuntime, s: BrewSession) -> float | None:
 
 
 def _abv(runtime: IspindelRuntime, s: BrewSession) -> float | None:
+    """Alcohol by volume.
+
+    Uses the Balling-derived form rather than the familiar (OG-FG)*131.25.
+    That shortcut is a linear fit which under-reads once past about 5% -- by
+    0.2% at a 6.5% beer, which is enough to matter on the headline figure.
+    """
     fg = _finish(runtime, s)
-    if s.og is None or fg is None:
+    if s.og is None or fg is None or s.og <= 1.0 or fg <= 0:
         return None
-    return round((s.og - fg) * ABV_FACTOR, 2)
+    return round(
+        (76.08 * (s.og - fg) / (1.775 - s.og)) * (fg / 0.794), 2
+    )
 
 
 SESSION_SENSORS: tuple[BrewSensorDescription, ...] = (
